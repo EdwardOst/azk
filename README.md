@@ -8,10 +8,9 @@ You will need to supply Azure and Kubernetes credentials.  Since the Docker imag
 may wish to keep Azure or Kubernetes credentials on the host laptop.  In order to provide access to these
 credentials within the container, you can map a host directory to a Docker volume.
 
-The Azure configuration settings are stored in /root/.azure.  The Kubernetes settings are in kubernetes.
-In addition, Kubernetes uses the Docker cliennt.  So the container installs just the Docker CLI within the
-container itself and uses the Docker daemon on the host OS by mapping the docker server socket as a
-volume.
+The Azure configuration settings are stored in /root/.azure.  Kubernetes settings are in kubernetes.
+In addition, Kubernetes uses the Docker client, so the container include the Docker cliient.  You can use the
+Docker daemon on the host OS by mapping the docker server socket as a volume.
 
     docker run -v /home/eost/azure/cli_host:/root \
                -v /home/eost/kubernetes_host:/kubernetes \
@@ -27,5 +26,5 @@ directories are already mapped.
                -v /var/run/docker.sock:/var/run/docker.sock \
                -it azuresdk/azure-cli-python:latest
 
-Need to address using host docker serfvice on windows, it may not be possible.
+TODO: need to address using host docker serfvice on windows, it may not be possible.
 
