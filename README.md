@@ -9,11 +9,16 @@ may wish to keep Azure or Kubernetes credentials on the host laptop.  In order t
 credentials within the container, you can map a host directory to a Docker volume.
 
 The Azure configuration settings are stored in /root/.azure.  Kubernetes settings are in kubernetes.
+
 In addition, Kubernetes uses the Docker client, so the container include the Docker cliient.  You can use the
 Docker daemon on the host OS by mapping the docker server socket as a volume.
 
+When creating kubernetes clusters ssh keys may be generated for you.  In this case you may want to persist
+the keys in the host os.  So you may want to map the containers ~/.ssh file to a host file.
+
     docker run -v /home/eost/azure/cli_host:/root \
                -v /home/eost/kubernetes_host:/kubernetes \
+               -v /home/eost/.ssh:/root/ssh \
                -v /var/run/docker.sock:/var/run/docker.sock \
                -it \
                azuresdk/azurep-cli-python:latest
