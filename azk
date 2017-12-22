@@ -1,8 +1,11 @@
-mkdir -p ${HOME}/azk
+#!/usr/bin/env bash
+
+declare config_dir="${1:-azk}"
+
+mkdir -p "${HOME}/${config_dir}"
 docker run \
     --rm \
     -it \
-    -v ${HOME}/azk:/root \
+    -v "${HOME}/${config_dir}:/root" \
     -v /var/run/docker.sock:/var/run/docker.sock \
     azk:0.1
-
