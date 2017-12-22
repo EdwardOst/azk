@@ -11,4 +11,5 @@ RUN apk update \
  && tar xzvf docker.tgz \
  && mv docker/docker /usr/local/bin \
  && mkdir -p kubernetes \
- && az acs kubernetes install-cli --install-location=/kubernetes/kubectl
+ && az acs kubernetes install-cli --install-location=/kubernetes/kubectl \
+ && ln -s /kubernetes/kubectl /usr/local/bin/kubectl
