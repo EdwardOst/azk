@@ -1,7 +1,8 @@
+mkdir -p ${HOME}/azk
 docker run \
     --rm \
     -it \
-    -v /home/eost/azk:/root \
+    -v ${HOME}/azk:/root \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    az-cli:0.1
+    azk:0.1
 
