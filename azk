@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare config_dir="${1:-azk}"
+declare config_dir="${1:-azk-config}"
 
 mkdir -p "${HOME}/${config_dir}"
 docker run \

@@ -44,6 +44,7 @@ TODO: need to address using host docker serfvice on windows, it may not be possi
 
 ```
 
+# login to azure
 bash-4.3# az login
 To sign in, use a web browser to open the page https://aka.ms/devicelogin and enter the code xxxxxx to 
 authenticate.
@@ -62,6 +63,7 @@ authenticate.
   }
 ]
 
+# createe resource group
 bash-4.3# az group create --name eost-acs --location eastus2
 {
   "id": "/subscriptions/736734f7-655c-4c6e-bdcd-945cc1d13eb4/resourceGroups/eost-acs",
@@ -74,11 +76,83 @@ bash-4.3# az group create --name eost-acs --location eastus2
   "tags": null
 }
 
-bash-4.3# az acs create --orchestrator-type kubernetes --resource-group eost-acs --name eost-k8 --generate-ssh-keys
+# create kubernetes cluster
+bash-4.3# az acs create --orchestrator-type kubernetes \
+                        --resource-group eost-acs \
+                        --name eost-k8 \
+                        --generate-ssh-keys \
+                        --agent-count 1
 SSH key files '/root/.ssh/id_rsa' and '/root/.ssh/id_rsa.pub' have been generated under ~/.ssh to allow SSH
 access to the VM. If using machines without permanent storage like Azure Cloud Shell without an attached file
 share, back up your keys to a safe location.
+{
+  "id": "/subscriptions/736734f7-655c-4c6e-bdcd-945cc1d13eb4/resourceGroups/eost-acs/providers/Microsoft.Resources/de                                                                        ployments/azurecli1513966522.294170675073",
+  "name": "azurecli1513966522.294170675073",
+  "properties": {
+    "correlationId": "6ecbae8d-4970-4f5c-8797-ebd781388914",
+    "debugSetting": null,
+    "dependencies": [],
+    "mode": "Incremental",
+    "outputs": {
+      "masterFQDN": {
+        "type": "String",
+        "value": "eost-k8-eost-acs-736734mgmt.eastus2.cloudapp.azure.com"
+      },
+      "sshMaster0": {
+        "type": "String",
+        "value": "ssh azureuser@eost-k8-eost-acs-736734mgmt.eastus2.cloudapp.azure.com -A -p 22"
+      }
+    },
+    "parameters": {
+      "clientSecret": {
+        "type": "SecureString"
+      }
+    },
+    "parametersLink": null,
+    "providers": [
+      {
+        "id": null,
+        "namespace": "Microsoft.ContainerService",
+        "registrationState": null,
+        "resourceTypes": [
+          {
+            "aliases": null,
+            "apiVersions": null,
+            "locations": [
+              "eastus2"
+            ],
+            "properties": null,
+            "resourceType": "containerServices"
+          }
+        ]
+      }
+    ],
+    "provisioningState": "Succeeded",
+    "template": null,
+    "templateLink": null,
+    "timestamp": "2017-12-22T18:25:16.305796+00:00"
+  },
+  "resourceGroup": "eost-acs"
+}
 
+# get kubernetes credentials
+bash-4.3# az acs kubernetes get-credentials --resource-group=eost-acs --name=eost-k8
 
+# inspect kubernetes cluster
+bash-4.3# kubectl get nodes
+NAME                    STATUS    ROLES     AGE       VERSION
+k8s-agent-196deeb9-0    Ready     agent     3m        v1.7.7
+k8s-agent-196deeb9-1    Ready     agent     3m        v1.7.7
+k8s-agent-196deeb9-2    Ready     agent     3m        v1.7.7
+k8s-master-196deeb9-0   Ready     master    2m        v1.7.7
+
+# run the application
+bash-4.3# kubectl create -f azure-vote.yml
+
+# monitor progress
+bash-4.3# kubectl get service azure-vote-front --watch
+
+# delete resource group
+bash-4.3# az group delete --name eost-acs --yes --no-wait
 
 ```
